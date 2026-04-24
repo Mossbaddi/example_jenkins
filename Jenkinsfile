@@ -17,7 +17,14 @@ pipeline {
     stage("Install") {
       steps {
         dir("app") {
-          sh "npm ci"
+          sh '''
+            if [ -f package-lock.json ]; then
+              npm ci
+            else
+              echo "package-lock.json absent -> fallback npm install"
+              npm install
+            fi
+          '''
         }
       }
     }
